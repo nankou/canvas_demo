@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas画板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        #container {
+            display: block;
+        }
+        
+        body {
+            margin: 0px;
+        }
+        
+        button {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="container" width="300" height="300"></canvas>
+    <button id="eraser">橡皮擦</button>
+</body>
+<script>
+    var canvas = document.getElementById('container');
+    var context = canvas.getContext('2d');
+    var eraser = document.getElementById('eraser'); // 橡皮擦
+
+    autoSetCanvas(canvas)
+    listenToMouse(canvas);
+
+    // canvas自适应
+    function autoSetCanvas(canvas) {
+        resizeContainer()
+
+        // 设置自适应宽度
+        window.onresize = function() {
+            resizeContainer()
+        }
+
+        function resizeContainer() {
+            var pageWidth = document.documentElement.clientWidth;
+            var pageHeight = document.documentElement.clientHeight;
+
+            canvas.width = pageWidth;
+            canvas.height = pageHeight
+        }
+    }
+
+    // 画线
+    function drawLine(x1, y1, x2, y2) {
+        context.beginPath();
+        context.moveTo(x1, y1); // 起点
+        context.lineWidth = 5; // 调整线的长度
+        context.lineTo(x2, y2);
+        context.stroke();
+        context.closePath();
+    }
+
+    // 鼠标事件
+    function listenToMouse() {
+        var using = false;
+        var lastPoint = {
+            x: undefined,
+            y: undefined
+        };
+
+        // 判断是手机还是PC端
+        if (document.body.ontouchstart !== undefined) {
+            // 手机端(触屏设备)
+            // touch事件
+            canvas.ontouchstart = function(a) {
+                var x = a.touches[0].clientX;
+                var y = a.touches[0].clientY;
+                using = true;
+                if (startEraser) {
+                    context.clearRect(x - 5, y - 5, 10, 10)
+                } else {
+                    lastPoint = {
+                        'x': x,
+                        'y': y
+                    };
+                }
+            }
+            canvas.ontouchmove = function(a) {
+                var x = a.touches[0].clientX;
+                var y = a.touches[0].clientY;
+                if (using) {
+                    if (startEraser) {
+                        context.clearRect(x - 5, y - 5, 10, 10)
+                    } else {
+                        var newPoint = {
+                            'x': x,
+                            'y': y
+                        }
+                        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+                        lastPoint = newPoint
+                    }
+                } else {
+                    return
+                }
+            }
+            canvas.ontouchend = function(a) {
+                using = false
+            }
+        } else {
+            // PC端（非触屏设备）
+            // 按下鼠标
+            canvas.onmousedown = function(a) {
+
+                var x = a.clientX;
+                var y = a.clientY;
+                using = true;
+                if (startEraser) {
+                    context.clearRect(x - 5, y - 5, 10, 10)
+                } else {
+                    lastPoint = {
+                        'x': x,
+                        'y': y
+                    };
+                    console.log(lastPoint);
+                }
+
+            }
+
+            // 移动鼠标
+            canvas.onmousemove = function(a) {
+                var x = a.clientX;
+                var y = a.clientY;
+                if (using) {
+                    if (startEraser) {
+                        context.clearRect(x - 5, y - 5, 10, 10)
+                    } else {
+                        var newPoint = {
+                            'x': x,
+                            'y': y
+                        }
+                        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+                        lastPoint = newPoint
+                    }
+                } else {
+                    return
+                }
+            }
+
+            // 松开鼠标
+            canvas.onmouseup = function(a) {
+                using = false
+            }
+
+        }
+
+
+
+
+        // 点击橡皮擦
+        var startEraser = false;
+        eraser.onclick = function() {
+            startEraser = !startEraser;
+            console.log('点击橡皮擦');
+        }
+
+
+    }
+</script>
+
+
+</html>

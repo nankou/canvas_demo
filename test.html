@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    function strLength(s, bUnicode255For1) {
+        if (bUnicode255For1) {
+            return s.length;
+        }
+        let len = s.length;
+        s.split('').forEach(si => {
+            si.charCodeAt(0) > 255 && len++
+        });
+        return len;
+    }
+    let s = 'hello world, 牛客';
+    console.log(strLength(s, false));
+</script>
+
+</html>
