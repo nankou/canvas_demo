@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>canvas画板</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="//at.alicdn.com/t/font_1302459_37ep6fjvzzn.js"></script>
+    <script src="//at.alicdn.com/t/font_1302459_n9gsm6nkir8.js"></script>
     <style>
         #container {
             display: block;
@@ -28,23 +28,55 @@
             fill: currentColor;
             overflow: hidden;
         }
+        .actions{
+            position: fixed;
+            top:0;
+            left:0;
+        }
+        .actions svg{
+            width: 1.5em;
+            height: 1.5em;
+        }
+        .actions svg.active{
+            fill: red;
+        }
     </style>
 </head>
 
 <body>
     <canvas id="container" width="300" height="300"></canvas>
 <!--    <button >橡皮擦</button>-->
-    <svg id="eraser" class="icon" aria-hidden="true">
-      <use xlink:href="#icon-xxx"></use>
-  </svg>
+    <div class="actions">
+        <svg id="pen" class="icon" aria-hidden="true">
+            <use xlink:href="#icon-huabi"></use>
+        </svg>
+        <svg id="eraser" class="icon" aria-hidden="true">
+            <use xlink:href="#icon-xiangpica"></use>
+        </svg>
+    </div>
+
 </body>
 <script>
     var canvas = document.getElementById('container');
     var context = canvas.getContext('2d');
     var eraser = document.getElementById('eraser'); // 橡皮  擦
+    var pen = document.getElementById('pen'); // 画笔
 
     autoSetCanvas(canvas)
     listenToMouse(canvas);
+
+    // 画笔和橡皮擦点击
+    var eraserEnabled = false;
+    pen.onclick = function (){
+        eraserEnabled = false;
+        pen.classList.add('active')
+        eraser.classList.remove('active')
+    }
+    eraser.onclick = function (){
+        eraserEnabled = true;
+        eraser.classList.add('active')
+        pen.classList.remove('active')
+    }
 
     // canvas自适应
     function autoSetCanvas(canvas) {
@@ -90,7 +122,7 @@
                 var x = a.touches[0].clientX;
                 var y = a.touches[0].clientY;
                 using = true;
-                if (startEraser) {
+                if (eraserEnabled) {
                     context.clearRect(x - 5, y - 5, 10, 10)
                 } else {
                     lastPoint = {
@@ -103,7 +135,7 @@
                 var x = a.touches[0].clientX;
                 var y = a.touches[0].clientY;
                 if (using) {
-                    if (startEraser) {
+                    if (eraserEnabled) {
                         context.clearRect(x - 5, y - 5, 10, 10)
                     } else {
                         var newPoint = {
@@ -128,7 +160,7 @@
                 var x = a.clientX;
                 var y = a.clientY;
                 using = true;
-                if (startEraser) {
+                if (eraserEnabled) {
                     context.clearRect(x - 5, y - 5, 10, 10)
                 } else {
                     lastPoint = {
@@ -145,7 +177,7 @@
                 var x = a.clientX;
                 var y = a.clientY;
                 if (using) {
-                    if (startEraser) {
+                    if (eraserEnabled) {
                         context.clearRect(x - 5, y - 5, 10, 10)
                     } else {
                         var newPoint = {
@@ -171,9 +203,8 @@
 
 
         // 点击橡皮擦
-        var startEraser = false;
         eraser.onclick = function() {
-            startEraser = !startEraser;
+            eraserEnabled = !eraserEnabled;
             console.log('点击橡皮擦');
         }
 
