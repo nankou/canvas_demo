@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>canvas画板</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="//at.alicdn.com/t/font_1302459_frog6aogz6m.js"></script>
+    <script src="//at.alicdn.com/t/font_1302459_le5ayss3tlq.js"></script>
     <style>
         #container {
         }
@@ -89,7 +89,6 @@
 
 <body>
     <canvas id="container" width="300" height="300"></canvas>
-<!--    <button >橡皮擦</button>-->
     <div class="actions">
         <svg id="pen" class="icon active" aria-hidden="true">
             <use xlink:href="#icon-huabi"></use>
@@ -99,6 +98,9 @@
         </svg>
         <svg id="clear" class="icon" aria-hidden="true">
             <use xlink:href="#icon-clear1"></use>
+        </svg>
+        <svg id="save" class="icon" aria-hidden="true">
+            <use xlink:href="#icon-baocun"></use>
         </svg>
     </div>
       <ol class="colors">
@@ -125,6 +127,7 @@
     var thin = document.getElementById('thin');
     var thick = document.getElementById('thick');
     var clear = document.getElementById('clear');
+    var save = document.getElementById('save');
 
     autoSetCanvas(canvas)
     listenToMouse(canvas);
@@ -169,6 +172,17 @@
     // 点击清屏
     clear.onclick = function (){
         context.clearRect(0,0,canvas.width,canvas.height)
+    }
+
+    // 点击保存图片
+    save.onclick = function (){
+        var url =  canvas.toDataURL("image/png");
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.href = url;
+        a.download = '大师神作';
+        a.target = '_blank'
+        a.click();
     }
 
     // 点击粗细
