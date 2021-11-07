@@ -8,18 +8,15 @@
     <script src="//at.alicdn.com/t/font_1302459_n9gsm6nkir8.js"></script>
     <style>
         #container {
-            display: block;
         }
+        ul,ol{
+            list-style: none;
+        }
+       *{
+           margin: 0;
+           padding: 0;
+       }
 
-        body {
-            margin: 0px;
-        }
-
-        button {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-        }
 
         .icon {
             width: 1em;
@@ -32,13 +29,39 @@
             position: fixed;
             top:0;
             left:0;
+            padding: 20px;
         }
         .actions svg{
             width: 1.5em;
             height: 1.5em;
+            margin: 0 10px;
         }
         .actions svg.active{
             fill: red;
+            transform: scale(1.2);
+        }
+        .colors{
+            position: fixed;
+            top: 60px;
+            left: 20px;
+        }
+        .colors > li{
+            width: 20px;
+            height: 20px;
+            margin: 10px 0 ;
+            border-radius: 50%;
+        }
+        .colors > li.red{
+            background-color: firebrick;
+        }
+        .colors > li.green{
+            background-color: green;
+        }
+        .colors > li.yellow{
+            background-color: yellow;
+        }
+        .colors > li.active{
+            transform: scale(1.2);
         }
     </style>
 </head>
@@ -47,13 +70,18 @@
     <canvas id="container" width="300" height="300"></canvas>
 <!--    <button >橡皮擦</button>-->
     <div class="actions">
-        <svg id="pen" class="icon" aria-hidden="true">
+        <svg id="pen" class="icon active" aria-hidden="true">
             <use xlink:href="#icon-huabi"></use>
         </svg>
         <svg id="eraser" class="icon" aria-hidden="true">
             <use xlink:href="#icon-xiangpica"></use>
         </svg>
     </div>
+      <ol class="colors">
+        <li id="red" class="red active"></li>
+        <li id="green" class="green"></li>
+        <li id="yellow" class="yellow"></li>
+    </ol>
 
 </body>
 <script>
@@ -61,6 +89,9 @@
     var context = canvas.getContext('2d');
     var eraser = document.getElementById('eraser'); // 橡皮  擦
     var pen = document.getElementById('pen'); // 画笔
+    var red = document.getElementById('red');
+    var green = document.getElementById('green');
+    var yellow = document.getElementById('yellow');
 
     autoSetCanvas(canvas)
     listenToMouse(canvas);
@@ -77,6 +108,30 @@
         eraser.classList.add('active')
         pen.classList.remove('active')
     }
+
+    // 点击颜色
+    red.onclick = function (){
+        context.fillStyle = 'red';
+        context.strokeStyle = 'red';
+        red.classList.add('active');
+        green.classList.remove('active');
+        yellow.classList.remove('active');
+    }
+    green.onclick = function (){
+        context.fillStyle = 'green';
+        context.strokeStyle = 'green';
+        green.classList.add('active');
+        red.classList.remove('active');
+        yellow.classList.remove('active');
+    }
+    yellow.onclick = function (){
+        context.fillStyle = 'yellow';
+        context.strokeStyle = 'yellow';
+        yellow.classList.add('active');
+        green.classList.remove('active');
+        red.classList.remove('active');
+    }
+
 
     // canvas自适应
     function autoSetCanvas(canvas) {
@@ -95,7 +150,6 @@
             canvas.height = pageHeight
         }
     }
-
     // 画线
     function drawLine(x1, y1, x2, y2) {
         context.beginPath();
