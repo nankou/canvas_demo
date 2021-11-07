@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>canvas画板</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="//at.alicdn.com/t/font_1302459_n9gsm6nkir8.js"></script>
+    <script src="//at.alicdn.com/t/font_1302459_frog6aogz6m.js"></script>
     <style>
         #container {
         }
@@ -15,7 +15,6 @@
        *{
            margin: 0;
            padding: 0;
-           overflow: hidden;
        }
         body{
             margin: 0;
@@ -66,6 +65,25 @@
         .colors > li.active{
             transform: scale(1.2);
         }
+        .sizes{
+            position: fixed;
+            right:10px;
+            top: 45px;
+        }
+        .sizes > li.active{
+            transform: scale(1.2);
+        }
+        .sizes > .thin{
+            height: 0;
+            width: 40px;
+            border-top: 3px solid black;
+        }
+        .sizes > .thick{
+            height: 0;
+            width: 40px;
+            border-top: 6px solid black;
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -79,11 +97,19 @@
         <svg id="eraser" class="icon" aria-hidden="true">
             <use xlink:href="#icon-xiangpica"></use>
         </svg>
+        <svg id="clear" class="icon" aria-hidden="true">
+            <use xlink:href="#icon-clear1"></use>
+        </svg>
     </div>
       <ol class="colors">
         <li id="red" class="red active"></li>
         <li id="green" class="green"></li>
         <li id="yellow" class="yellow"></li>
+    </ol>
+
+    <ol class="sizes">
+        <li id="thin" class="thin active"></li>
+        <li id="thick" class="thick"></li>
     </ol>
 
 </body>
@@ -95,6 +121,10 @@
     var red = document.getElementById('red');
     var green = document.getElementById('green');
     var yellow = document.getElementById('yellow');
+    var lineWidth = 5;
+    var thin = document.getElementById('thin');
+    var thick = document.getElementById('thick');
+    var clear = document.getElementById('clear');
 
     autoSetCanvas(canvas)
     listenToMouse(canvas);
@@ -136,6 +166,21 @@
     }
 
 
+
+
+    // 点击粗细
+    thin.onclick = function (){
+        lineWidth = 5;
+        thin.classList.add('active')
+        thick.classList.remove('active')
+    }
+    thick.onclick = function (){
+        lineWidth = 10;
+        thick.classList.add('active')
+        thin.classList.remove('active')
+    }
+
+
     // canvas自适应
     function autoSetCanvas(canvas) {
         resizeContainer()
@@ -157,7 +202,7 @@
     function drawLine(x1, y1, x2, y2) {
         context.beginPath();
         context.moveTo(x1, y1); // 起点
-        context.lineWidth = 5; // 调整线的长度
+        context.lineWidth = lineWidth; // 调整线的长度
         context.lineTo(x2, y2);
         context.stroke();
         context.closePath();
