@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>canvas画板</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="//at.alicdn.com/t/font_1302459_le5ayss3tlq.js"></script>
+    <script src="//at.alicdn.com/t/font_1302459_v0tcipf61co.js"></script>
     <style>
         #container {
             display: block;
@@ -31,32 +31,39 @@
             vertical-align: -0.15em;
             fill: currentColor;
             overflow: hidden;
+            transition: all 0.4s;
         }
         .actions{
             position: fixed;
             top:0;
             left:0;
             padding: 20px;
+
         }
         .actions svg{
             width: 1.5em;
             height: 1.5em;
             margin: 0 10px;
+            transition: all 0.4s;
+
         }
         .actions svg.active{
             fill: red;
             transform: scale(1.2);
+
         }
         .colors{
             position: fixed;
             top: 60px;
             left: 20px;
+            transition: all 0.4s;
         }
         .colors > li{
             width: 20px;
             height: 20px;
             margin: 10px 0 ;
             border-radius: 50%;
+            transition: all 0.4s;
         }
         .colors > li.red{
             background-color: firebrick;
@@ -68,25 +75,39 @@
             background-color: yellow;
         }
         .colors > li.active{
+
             transform: scale(1.2);
         }
         .sizes{
             position: fixed;
             right:10px;
             top: 45px;
+
+        }
+        .sizes > li{
+            /*border-radius: 30%;*/
+            transition: all 0.4s;
         }
         .sizes > li.active{
             transform: scale(1.2);
         }
         .sizes > .thin{
-            height: 0;
+            height: 2px;
+            background-color: black;
+            border-radius: 10px;
             width: 40px;
-            border-top: 3px solid black;
         }
         .sizes > .thick{
-            height: 0;
+            height: 4px;
+            background-color: black;
+            border-radius: 10px;
             width: 40px;
-            border-top: 6px solid black;
+            margin-top: 20px;
+        }
+        .sizes > .thicker{
+            height: 6px;
+            background-color: black;
+            border-radius: 10px;
             margin-top: 20px;
         }
     </style>
@@ -102,10 +123,10 @@
             <use xlink:href="#icon-xiangpica"></use>
         </svg>
         <svg id="clear" class="icon" aria-hidden="true">
-            <use xlink:href="#icon-clear1"></use>
+            <use xlink:href="#icon-CLEAR"></use>
         </svg>
         <svg id="save" class="icon" aria-hidden="true">
-            <use xlink:href="#icon-baocun"></use>
+            <use xlink:href="#icon-save"></use>
         </svg>
     </div>
       <ol class="colors">
@@ -117,6 +138,7 @@
     <ol class="sizes">
         <li id="thin" class="thin active"></li>
         <li id="thick" class="thick"></li>
+        <li id="thicker" class="thicker"></li>
     </ol>
 
 </body>
@@ -131,8 +153,10 @@
     var lineWidth = 5;
     var thin = document.getElementById('thin');
     var thick = document.getElementById('thick');
+    var thicker = document.getElementById('thicker');
     var clear = document.getElementById('clear');
     var save = document.getElementById('save');
+
 
     autoSetCanvas(canvas)
     listenToMouse(canvas);
@@ -195,10 +219,18 @@
         lineWidth = 5;
         thin.classList.add('active')
         thick.classList.remove('active')
+        thicker.classList.remove('active')
     }
     thick.onclick = function (){
         lineWidth = 10;
         thick.classList.add('active')
+        thin.classList.remove('active')
+        thicker.classList.remove('active')
+    }
+    thicker.onclick = function (){
+        lineWidth = 15;
+        thicker.classList.add('active')
+        thick.classList.remove('active')
         thin.classList.remove('active')
     }
 
