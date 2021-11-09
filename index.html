@@ -252,6 +252,15 @@
             canvas.height = pageHeight
         }
     }
+
+    // 画点
+        function drawCircle(x,y,radius){
+        context.save();
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.PI * 2);
+        context.fill();
+    }
+
     // 画线
     function drawLine(x1, y1, x2, y2) {
         context.beginPath();
@@ -285,6 +294,7 @@
                         'x': x,
                         'y': y
                     };
+                    drawCircle(lastPoint.x,lastPoint.y,1)
                 }
             }
             canvas.ontouchmove = function(a) {
